@@ -4,8 +4,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
-const char strImagePath[] = "C:/Users/taoli/Desktop/organization/Image12";
-const std::string strResultPath = "C:/Users/taoli/Desktop/organization/Calibration_Result/Camera222.txt";
+const char strImagePath[] = "../Test";
+const std::string strResultPath = "../Test/Camera000.txt";
 
 int main()
 {
@@ -93,23 +93,35 @@ int main()
 	calibration_data.open(strResultPath, std::ofstream::out);
 
 	std::cout << "开始保存定标结果…" << std::endl;
-	cv::Mat rotation_matrix = cv::Mat(3, 3, CV_32FC1, cv::Scalar::all(0));
-	calibration_data << "相机内参矩阵: " << std::endl;
-	calibration_data << cameraMatrix << std::endl << std::endl;
-	calibration_data << "相机畸变系数: " << std::endl;
-	calibration_data << distCoeffs << std::endl << std::endl << std::endl;
-	for (int i = 0; i < vvImgPoints.size(); i++)
-	{
-		calibration_data << "第" << i + 1 << "图像旋转矢量：" << std::endl;
-		calibration_data << rvecsMat[i] << std::endl << std::endl;
 
-		/* 将旋转向量转换为相对应的旋转矩阵 */
-		Rodrigues(rvecsMat[i], rotation_matrix);
-		calibration_data << "第" << i + 1 << "图像旋转矩阵：" << std::endl;
-		calibration_data << rotation_matrix << std::endl << std::endl;
-		calibration_data << "第" << i + 1 << "图像平移矢量：" << std::endl;
-		calibration_data << tvecsMat[i] << std::endl << std::endl << std::endl;
-	}
+	calibration_data << cameraMatrix.ptr<double>(0)[0] << std::endl	//fu
+		<< cameraMatrix.ptr<double>(1)[1] << std::endl				//fv
+		<< cameraMatrix.ptr<double>(0)[2] << std::endl				//u0
+		<< cameraMatrix.ptr<double>(1)[2] << std::endl				//v0
+		<< distCoeffs.ptr<double>(0)[0] << std::endl				//k1
+		<< distCoeffs.ptr<double>(0)[1] << std::endl				//k2
+		<< distCoeffs.ptr<double>(0)[4] << std::endl				//k3
+		<< distCoeffs.ptr<double>(0)[2] << std::endl				//p1
+		<< distCoeffs.ptr<double>(0)[3] << std::endl;				//p2
+
+
+	//cv::Mat rotation_matrix = cv::Mat(3, 3, CV_32FC1, cv::Scalar::all(0));
+	//calibration_data << "相机内参矩阵: " << std::endl;
+	//calibration_data << cameraMatrix << std::endl << std::endl;
+	//calibration_data << "相机畸变系数: " << std::endl;
+	//calibration_data << distCoeffs << std::endl << std::endl << std::endl;
+	//for (int i = 0; i < vvImgPoints.size(); i++)
+	//{
+	//	calibration_data << "第" << i + 1 << "图像旋转矢量：" << std::endl;
+	//	calibration_data << rvecsMat[i] << std::endl << std::endl;
+
+	//	/* 将旋转向量转换为相对应的旋转矩阵 */
+	//	Rodrigues(rvecsMat[i], rotation_matrix);
+	//	calibration_data << "第" << i + 1 << "图像旋转矩阵：" << std::endl;
+	//	calibration_data << rotation_matrix << std::endl << std::endl;
+	//	calibration_data << "第" << i + 1 << "图像平移矢量：" << std::endl;
+	//	calibration_data << tvecsMat[i] << std::endl << std::endl << std::endl;
+	//}
 	std::cout << "定标结果完成保存！" << std::endl;
 	calibration_data << std::endl;
 	

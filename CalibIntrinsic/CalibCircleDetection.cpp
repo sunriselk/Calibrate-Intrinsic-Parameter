@@ -11,7 +11,7 @@ CalibCircleDetection::~CalibCircleDetection()
 }
 float CalibCircleDetection::computeLengthOfTwoPoint(cv::Point2f p1, cv::Point2f p2)
 {
-	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y,2));
+	return (float)sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y,2));
 }
 int CalibCircleDetection::DectectTargetEllipses(HalconCpp::HObject &H_img, 
 	const double &trueDistanceX, const double &trueDistanceY,
@@ -29,17 +29,17 @@ int CalibCircleDetection::DectectTargetEllipses(HalconCpp::HObject &H_img,
 	int is2 = GetEllipseHalcon(H_img, PointsEllipse, Point5Ellipse);
 	if (is2 != 1)
 		return -2;
-	int ellipseNum = PointsEllipse.size();
+	int ellipseNum = (int)PointsEllipse.size();
 	HTuple imageWidth, imageHeight;
 	GetImageSize(H_img, &imageWidth, &imageHeight);
 
 	std::vector<cv::Point2f> Target5Ellipse;
 
-	Target5Ellipse.push_back(cv::Point2f(sortIndex[0].first * trueDistanceX, sortIndex[0].second * trueDistanceX));
-	Target5Ellipse.push_back(cv::Point2f(sortIndex[1].first * trueDistanceX, sortIndex[1].second * trueDistanceX));
-	Target5Ellipse.push_back(cv::Point2f(sortIndex[2].first * trueDistanceX, sortIndex[2].second * trueDistanceX));
-	Target5Ellipse.push_back(cv::Point2f(sortIndex[3].first * trueDistanceX, sortIndex[3].second * trueDistanceX));
-	Target5Ellipse.push_back(cv::Point2f(sortIndex[4].first * trueDistanceX, sortIndex[4].second * trueDistanceX));
+	Target5Ellipse.push_back(cv::Point2f(float(sortIndex[0].first * trueDistanceX), float(sortIndex[0].second * trueDistanceX)));
+	Target5Ellipse.push_back(cv::Point2f(float(sortIndex[1].first * trueDistanceX), float(sortIndex[1].second * trueDistanceX)));
+	Target5Ellipse.push_back(cv::Point2f(float(sortIndex[2].first * trueDistanceX), float(sortIndex[2].second * trueDistanceX)));
+	Target5Ellipse.push_back(cv::Point2f(float(sortIndex[3].first * trueDistanceX), float(sortIndex[3].second * trueDistanceX)));
+	Target5Ellipse.push_back(cv::Point2f(float(sortIndex[4].first * trueDistanceX), float(sortIndex[4].second * trueDistanceX)));
 
 
 	cv::Mat homography = cv::findHomography(Target5Ellipse, Point5Ellipse);////**从标定板映射到图像
@@ -300,16 +300,16 @@ int CalibCircleDetection::GetEllipseHalcon( const HalconCpp::HObject &dst,std::v
 		//******5个大圆对应完毕
 		for (size_t ii = 0; ii<5; ii++)
 		{
-			float row = Row_5Ellipse_sorted[ii].D();
-			float col = Col_5Ellipse_sorted[ii].D();
+			float row = (float)Row_5Ellipse_sorted[ii].D();
+			float col = (float)Col_5Ellipse_sorted[ii].D();
 			Point5Ellipse.push_back(cv::Point2f(col, row));
 		}
 		//****对所有圆排序
 		int length1 = length_all[0].I();
 		for (size_t ii = 0; ii<length1; ii++)
 		{
-			float row = Row1[ii].D();
-			float col = Column1[ii].D();
+			float row = (float)Row1[ii].D();
+			float col = (float)Column1[ii].D();
 			PointsEllipse.push_back(cv::Point2f(col, row));
 		}
 	}
